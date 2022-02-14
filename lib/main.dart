@@ -115,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Ti
                         color: Colors.white,
                         onRefresh: () {
                           return Future.sync(() {
+                            videoProvider.listenV(context);
                             SocketServices.shared.connect(context);
                           });
                         },

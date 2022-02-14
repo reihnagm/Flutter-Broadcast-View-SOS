@@ -28,7 +28,6 @@ class VideoProvider with ChangeNotifier {
   }
 
   Future<void> listenV(BuildContext context, [dynamic data]) async {
-    _v = [];
     setStateListenVStatus(ListenVStatus.loading);
     if(data != null) {
       await DBHelper.insert("sos", {
@@ -36,20 +35,22 @@ class VideoProvider with ChangeNotifier {
         "mediaUrl": data["mediaUrl"],
         "msg": data["msg"]
       });
-        List<Map<String, dynamic>> listSos = await DBHelper.fetchSos(context);
-        for (var sos in listSos) {
-          _v.add({
-            "id": sos["id"],
-            "video": VideoPlayerController.network(sos["mediaUrl"])
-            ..addListener(() => notifyListeners())
-            ..setLooping(false)
-            ..initialize(),
-            "msg": sos["msg"],
-          });
-        }
+      List<Map<String, dynamic>> listSos = await DBHelper.fetchSos(context);
+      _v = [];
+      for (var sos in listSos) {
+        _v.add({
+          "id": sos["id"],
+          "video": VideoPlayerController.network(sos["mediaUrl"])
+          ..addListener(() => notifyListeners())
+          ..setLooping(false)
+          ..initialize(),
+          "msg": sos["msg"],
+        });
+      }
     } else {
       List<Map<String, dynamic>> listSos = await DBHelper.fetchSos(context);
       List<Map<String, dynamic>> sosAssign = [];
+      _v = [];
       for (var sos in listSos) {
         sosAssign.add({
           "id": sos["id"],
