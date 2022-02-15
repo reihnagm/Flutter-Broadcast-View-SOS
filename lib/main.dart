@@ -100,12 +100,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Ti
                 builder: (BuildContext context, NetworkProvider networkProvider, Widget? child) {
                   if(networkProvider.connectionStatus == ConnectionStatus.offInternet) {
                     return const Center(
-                      child: Text("There is no Connection / Socket is off",
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold
-                        ),
-                      )
+                      child: SpinKitThreeBounce(
+                        size: 20.0,
+                        color: Colors.black87,
+                      ),
                     );
                   }
                   return Consumer<VideoProvider>(
@@ -246,17 +244,97 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Ti
                                                                           ),
                                                                         ),
                                                                         const SizedBox(height: 20.0),
-                                                                        const Text("Lat: -6.175392",
-                                                                          style: TextStyle(
-                                                                            fontSize: 14.0
-                                                                          ),
-                                                                        ),
-                                                                        const SizedBox(height: 5.0),
-                                                                        const Text("Lng: 106.827153",
-                                                                          style: TextStyle(
-                                                                            fontSize: 14.0
-                                                                          ),
-                                                                        ),
+                                                                        Column(
+                                                                          mainAxisSize: MainAxisSize.min,
+                                                                          children: [
+                                                                            Row(
+                                                                              children: [
+                                                                                const Expanded(
+                                                                                  flex: 4,
+                                                                                  child: Text("Lat", 
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 13.0
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                const Expanded(
+                                                                                  flex: 4,
+                                                                                  child: Text(":", 
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 13.0
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                Expanded(
+                                                                                  flex: 33,
+                                                                                  child: Text("${videoProvider.v[i]['lat']}",
+                                                                                    style: const TextStyle(
+                                                                                      fontSize: 13.0
+                                                                                    ),
+                                                                                  )
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                            const SizedBox(height: 8.0),
+                                                                            Row(
+                                                                              children: [
+                                                                                const Expanded(
+                                                                                  flex: 4,
+                                                                                  child: Text("Lng", 
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 13.0
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                const Expanded(
+                                                                                  flex: 4,
+                                                                                  child: Text(":", 
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 13.0
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                Expanded(
+                                                                                  flex: 33,
+                                                                                  child: Text("${videoProvider.v[i]['lng']}",
+                                                                                    style: const TextStyle(
+                                                                                      fontSize: 13.0
+                                                                                    ),
+                                                                                  )
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                            const SizedBox(height: 12.0),
+                                                                            Row(
+                                                                              children: [
+                                                                                const Expanded(
+                                                                                  flex: 6,
+                                                                                  child: Text("Lokasi", 
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 13.0
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                const Expanded(
+                                                                                  flex: 4,
+                                                                                  child: Text(":", 
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 13.0
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                Expanded(
+                                                                                  flex: 28,
+                                                                                  child: Text("${videoProvider.v[i]['loc']}",
+                                                                                    style: const TextStyle(
+                                                                                      fontSize: 13.0
+                                                                                    ),
+                                                                                  )
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        )
                                                                       ],
                                                                     ) 
                                                                   ),
@@ -264,38 +342,41 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Ti
                                                                     flex: 1,
                                                                     child: Column(
                                                                       children: [
-                                                                        Material(
-                                                                          color: Colors.transparent,
-                                                                          child: InkWell(
-                                                                            onTap: () {
-                                                                              videoProvider.deleteV(
-                                                                                context, 
-                                                                                id: videoProvider.v[i]["id"].toString()
-                                                                              );
-                                                                            },
-                                                                            child: const Padding(
-                                                                              padding: EdgeInsets.all(8.0),
-                                                                              child: Icon(
-                                                                                Icons.remove_circle,
-                                                                                color: Colors.redAccent,
-                                                                                size: 30.0,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
+                                                                        // Material(
+                                                                        //   color: Colors.transparent,
+                                                                        //   child: InkWell(
+                                                                        //     onTap: () {
+                                                                        //       videoProvider.deleteV(
+                                                                        //         context, 
+                                                                        //         id: videoProvider.v[i]["id"].toString()
+                                                                        //       );
+                                                                        //     },
+                                                                        //     child: const Padding(
+                                                                        //       padding: EdgeInsets.all(8.0),
+                                                                        //       child: Icon(
+                                                                        //         Icons.remove_circle,
+                                                                        //         color: Colors.redAccent,
+                                                                        //         size: 30.0,
+                                                                        //       ),
+                                                                        //     ),
+                                                                        //   ),
+                                                                        // ),
                                                                         Material(
                                                                           color: Colors.transparent,
                                                                           child: InkWell(
                                                                             onTap: () async {
-                                                                              await launch("https://www.google.com/maps?daddr=-6.175392,106.827153");
+                                                                              await launch("https://www.google.com/maps?daddr=${videoProvider.v[i]["lat"]},${videoProvider.v[i]["lng"]}");
                                                                             },
                                                                             child: const Padding(
                                                                               padding: EdgeInsets.all(8.0),
-                                                                              child: Icon(
-                                                                                Icons.maps_home_work,
-                                                                                color: Colors.blueAccent,
-                                                                                size: 30.0,
-                                                                              ),
+                                                                              child: Text("Lihat di Maps",
+                                                                                style: TextStyle(
+                                                                                  color: Colors.blueAccent,
+                                                                                  fontSize: 14.0,
+                                                                                  decoration: TextDecoration.underline,
+                                                                                  fontStyle: FontStyle.italic
+                                                                                ),
+                                                                              )
                                                                             ),
                                                                           ),
                                                                         ),
@@ -344,4 +425,3 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Ti
   }
 }
 
-T? _ambiguate<T>(T? value) => value;

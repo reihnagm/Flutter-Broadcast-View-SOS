@@ -24,12 +24,15 @@ dependencies:
   # F
   file_picker: ^4.3.3
   filesize: ^2.0.1
+  flutter_local_notifications: ^9.1.5
   firebase_storage: ^10.2.3
   fluttertoast: ^8.0.8
   flutter_spinkit: ^5.1.0
 
   # G
   get_it: ^7.2.0
+  geocoding: ^2.0.1
+  geolocator: ^7.7.0
   gallery_saver: ^2.3.2
 
   # L
@@ -54,6 +57,8 @@ dependencies:
   # U
   uuid: ^3.0.5
   url_launcher: ^6.0.20
+  dio: ^4.0.4
+  firebase_messaging: ^11.2.6
    
 
 dev_dependencies:

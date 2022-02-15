@@ -10,7 +10,7 @@ class DBHelper {
   }
 
   static Future<void> createDb(Database db) async {
-    await db.execute("CREATE TABLE sos (id TEXT PRIMARY KEY, mediaUrl TEXT, msg TEXT, created_at)");
+    await db.execute("CREATE TABLE sos (id TEXT PRIMARY KEY, mediaUrl TEXT, msg TEXT, lat TEXT, lng TEXT)");
   }
 
   static Future<void> insert(String table, Map<String, Object> data) async {
