@@ -1,46 +1,46 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:dio/dio.dart';
+import 'dart:convert';
 
-import 'package:broadcast_view_sos/utils/constant.dart';
+import 'package:broadcast_view_sos/services/notification.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:broadcast_view_sos/data/repository/firebase.dart';
 
 class FirebaseProvider with ChangeNotifier {
-  Future<void> sendNotification({
-    required String body,
-  }) async {
-    Map<String, dynamic> data = {};
-    data = {
-      "to": await FirebaseMessaging.instance.getToken(),
-      "collapse_key" : "Broadcast SOS",
-      "priority":"high",
-      "notification": {
-        "title": "SOS",
-        "body": body,
-        "sound":"default",
-      },
-      "android": {
-        "notification": {
-          "channel_id": "sos",
-        }
-      },
-      "data": {
-        "click_action": "FLUTTER_NOTIFICATION_CLICK",
-      },
-    };
-    try { 
-      Dio dio = Dio();
-      await dio.post("https://fcm.googleapis.com/fcm/send", 
-        data: data,
-        options: Options(
-          headers: {
-            "Authorization": "key=${AppConstants.firebaseKey}"
-          }
-        )
+  final FirebaseRepo firebaseRepo;
+  final SharedPreferences sharedPreferences;
+
+  FirebaseProvider({
+    required this.firebaseRepo,
+    required this.sharedPreferences
+  });
+
+  void listenNotification(BuildContext context) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      // RemoteNotification notification = message.notification!;
+      Map<String, dynamic> data = message.data;
+      Map<String, dynamic> payload = json.decode(data["payload"]);
+      NotificationService.showNotification(
+        title: payload["title"],
+        body: payload["body"],
+        payload: payload,
       );
-    } on DioError catch(e) {
-      debugPrint(e.response!.data.toString());
-      debugPrint(e.response!.statusMessage.toString());
-      debugPrint(e.response!.statusCode.toString());
-    }
+    });
   }
+
+  Future<void> initFcm(BuildContext context) async {
+    try {
+      await firebaseRepo.initFcm(
+        context, 
+        lat: getCurrentLat, 
+        lng: getCurrentLng
+      );
+    } catch(e) {
+      debugPrint(e.toString());
+    } 
+  }
+
+  double get getCurrentLat => sharedPreferences.getDouble("lat") ?? 0.0;  
+  double get getCurrentLng => sharedPreferences.getDouble("long") ?? 0.0;  
 }

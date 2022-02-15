@@ -9,6 +9,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:broadcast_view_sos/providers/location.dart';
+import 'package:broadcast_view_sos/services/notification.dart';
+import 'package:broadcast_view_sos/providers/firebase.dart';
 import 'package:broadcast_view_sos/providers.dart';
 import 'package:broadcast_view_sos/providers/network.dart';
 import 'package:broadcast_view_sos/providers/videos.dart';
@@ -47,20 +50,49 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, TickerProviderStateMixin {
   dynamic currentBackPressTime;
+  late FirebaseProvider firebaseProvider;
+  late LocationProvider locationProvider;
+  late VideoProvider videoProvider;
+  late NetworkProvider networkProvider;
 
   @override 
   void initState() {
     super.initState();
-    if(mounted) {
-      context.read<VideoProvider>().listenV(context);
-    }
-    if(mounted) {
-      context.read<NetworkProvider>().checkConnection(context);
-    }
-    if(mounted) {
-      SocketServices.shared.connect(context);
-    }
+
+    firebaseProvider =  context.read<FirebaseProvider>();
+    locationProvider = context.read<LocationProvider>();
+    videoProvider = context.read<VideoProvider>();
+    networkProvider = context.read<NetworkProvider>();
+
+    NotificationService.init();
+
+    listenOnClickNotifications();
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      if(mounted) {
+        firebaseProvider.listenNotification(context);
+      }
+      if(mounted) {
+        firebaseProvider.initFcm(context);
+      }
+      if(mounted) {
+        locationProvider.getCurrentPosition(context);
+      }
+      if(mounted) {
+        videoProvider.listenV(context);
+      }
+      if(mounted) {
+       networkProvider.checkConnection(context);
+      }
+      if(mounted) {
+        SocketServices.shared.connect(context);
+      }
+    });
   }
+
+  void listenOnClickNotifications() => NotificationService.onNotifications.stream.listen(onClickedNotification);
+
+  void onClickedNotification(String? payload) async {}
 
   @override 
   void dispose() {

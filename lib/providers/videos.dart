@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
 import 'package:broadcast_view_sos/services/sqlite.dart';
@@ -7,6 +8,10 @@ import 'package:broadcast_view_sos/services/sqlite.dart';
 enum ListenVStatus { idle, loading, loaded, empty, error }
 
 class VideoProvider with ChangeNotifier {
+  final SharedPreferences sharedPreferences;
+  VideoProvider({
+    required this.sharedPreferences
+  });
 
   @override
   void dispose() {
