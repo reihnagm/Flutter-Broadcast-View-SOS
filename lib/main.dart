@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Ti
 
     listenOnClickNotifications();
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       if(mounted) {
         firebaseProvider.listenNotification(context);
       }
