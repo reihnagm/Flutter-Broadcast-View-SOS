@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:broadcast_view_sos/utils/global.dart';
 import 'package:broadcast_view_sos/providers/location.dart';
 import 'package:broadcast_view_sos/services/notification.dart';
 import 'package:broadcast_view_sos/providers/firebase.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       providers: providers,
       child: MaterialApp(
         title: 'SOS Broadcast View',
+        navigatorKey: GlobalVariable.navState,
         debugShowCheckedModeBanner: false,
         home: MyHomePage(key: UniqueKey()),
       ),
@@ -70,6 +72,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Ti
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if(mounted) {
+        firebaseProvider.setupInteractedMessage(context);
+      }
+      if(mounted) {
         firebaseProvider.listenNotification(context);
       }
       if(mounted) {
@@ -92,7 +97,24 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Ti
 
   void listenOnClickNotifications() => NotificationService.onNotifications.stream.listen(onClickedNotification);
 
-  void onClickedNotification(String? payload) async {}
+  void onClickedNotification(String? payload) async {
+    GlobalVariable.navState.currentState!.pushAndRemoveUntil(
+      PageRouteBuilder(pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+        return MyApp(key: UniqueKey());
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      }),
+      (Route<dynamic> route) => route.isFirst
+    );
+  }
 
   @override 
   void dispose() {

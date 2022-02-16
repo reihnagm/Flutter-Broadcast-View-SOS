@@ -35,6 +35,6 @@ class DBHelper {
   
   static Future<List<Map<String, dynamic>>> fetchSos(BuildContext context) async {
     Database db = await DBHelper.database();
-    return db.rawQuery("SELECT * FROM sos ORDER BY id ASC");
+    return db.rawQuery("SELECT * FROM sos ORDER BY id DESC");
   }
 }

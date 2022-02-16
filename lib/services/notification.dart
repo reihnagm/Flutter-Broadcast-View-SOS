@@ -19,6 +19,8 @@ class NotificationService {
       channelDescription: 'sos_channel',
       importance: Importance.max, 
       priority: Priority.high,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('sos'),
       channelShowBadge: true,
       enableVibration: true,
       enableLights: true,
